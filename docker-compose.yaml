@@ -2,14 +2,14 @@ version: '3'
 
 services:
   mysql:
-    image: mysql:latest
-    container_name: your-mysql-container
-    ports:
-      - "3306:3306"
+    image: mysql
+    restart: always
+    container_name: MySQL_container
     environment:
-      MYSQL_DATABASE: AFTAS
-      MYSQL_USER: root
-      MYSQL_PASSWORD: 
+      MYSQL_ROOT_PASSWORD: a
+    volumes:
+      - ./mysql-scripts:/docker-entrypoint-initdb.d
+    
   springboot-app:
     build:
       context: ./Aftas
@@ -19,9 +19,9 @@ services:
     depends_on:
       - mysql
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/AFTAS?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/AFTAS?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: 
+      SPRING_DATASOURCE_PASSWORD: a
       SPRING_LIQUIBASE_ENABLED : true
 
   angular-app:
